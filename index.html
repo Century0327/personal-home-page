@@ -1,0 +1,2345 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>绝密档案 · FOX-2026-001 | 令狐苏</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Noto+Serif+SC:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            coral: '#E85A4F',
+            'coral-glow': '#FF7B6F',
+            cream: '#F5F0EB',
+            'cream-warm': '#EAE5E0',
+            dark: '#1A1A1A',
+            'dark-trae': '#1E1E2E',
+            'dark-card': '#252530',
+            'dark-border': '#353545',
+            gray: '#888888',
+            'gray-warm': '#9E9A94',
+            'code-bg': '#0F1117',
+            'code-blue': '#7EE787',
+            'code-purple': '#C792EA',
+            'code-cyan': '#82AAFF',
+          },
+          fontFamily: {
+            serif: ['Noto Serif SC', 'serif'],
+            display: ['Playfair Display', 'serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .glass { @apply bg-white/70 backdrop-blur-xl border border-white/20; }
+      .dark .glass { @apply bg-dark-trae/70 backdrop-blur-xl border border-dark-border/50; }
+      .text-glow { text-shadow: 0 0 20px rgba(232,90,79,0.3); }
+      .scan-line {
+        background: linear-gradient(to bottom, transparent 50%, rgba(232,90,79,0.03) 50%);
+        background-size: 100% 4px;
+        pointer-events: none;
+      }
+    }
+  </style>
+  <style>
+    :root {
+      --bg: #F5F0EB;
+      --card: #FFFFFF;
+      --text: #1A1A1A;
+      --text-secondary: #888888;
+      --border: #E5E0DB;
+      --accent: #E85A4F;
+    }
+    .dark {
+      --bg: #1A1A1A;
+      --card: #1E1E2E;
+      --text: #EAE5E0;
+      --text-secondary: #888888;
+      --border: #353545;
+      --accent: #E85A4F;
+    }
+    body {
+      font-family: 'Noto Serif SC', serif;
+      background-color: var(--bg);
+      color: var(--text);
+      transition: background-color 0.5s ease, color 0.5s ease;
+      overflow-x: hidden;
+    }
+    .font-display { font-family: 'Playfair Display', serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* 粒子与轨迹 */
+    .particle {
+      position: fixed;
+      pointer-events: none;
+      border-radius: 50%;
+      z-index: 0;
+      animation: particleFloat 20s infinite linear;
+    }
+    @keyframes particleFloat {
+      0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
+      100% { transform: translateY(-10vh) translateX(30px); opacity: 0; }
+    }
+    .cursor-trail {
+      position: fixed;
+      pointer-events: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      opacity: 0.6;
+      z-index: 9999;
+      animation: trailFade 1s forwards;
+    }
+    @keyframes trailFade {
+      0% { opacity: 0.6; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.5) translateY(-20px); }
+    }
+
+    /* 滚动动画 */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* 打字机 */
+    .typewriter::after {
+      content: '|';
+      animation: blink 1s step-end infinite;
+      color: var(--accent);
+      margin-left: 2px;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* 能力轨道 */
+    .orbit-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    .orbit-ring {
+      position: absolute;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .orbit-item {
+      position: absolute;
+      transform-origin: center center;
+    }
+    @keyframes orbitRotate {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    @keyframes orbitCounter {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(-360deg); }
+    }
+    .orbit-1 { animation: orbitRotate 30s linear infinite; }
+    .orbit-2 { animation: orbitCounter 25s linear infinite; }
+    .orbit-3 { animation: orbitRotate 20s linear infinite; }
+
+    /* 瀑布流 */
+    .masonry-grid {
+      column-count: 1;
+      column-gap: 1.25rem;
+    }
+    @media (min-width: 768px) { .masonry-grid { column-count: 2; } }
+    @media (min-width: 1280px) { .masonry-grid { column-count: 3; } }
+    .masonry-item {
+      break-inside: avoid;
+      margin-bottom: 1.25rem;
+    }
+
+    /* 卡片 */
+    .card-hover {
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .card-hover:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 48px -12px rgba(232,90,79,0.15);
+    }
+    .dark .card-hover:hover {
+      box-shadow: 0 24px 48px -12px rgba(232,90,79,0.25);
+      border-color: rgba(232,90,79,0.3);
+    }
+
+    /* 时间线 */
+    .timeline-line {
+      position: absolute;
+      left: 24px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent), #8B5CF6, transparent);
+    }
+
+    /* 聊天框 */
+    .chat-bubble-left {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px 16px 16px 4px;
+    }
+    .chat-bubble-right {
+      position: relative;
+      background: var(--accent);
+      color: white;
+      border-radius: 16px 16px 4px 16px;
+    }
+
+    /* 进度条动画 */
+    .progress-fill {
+      width: 0;
+      transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* 筛选标签 */
+    .filter-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    /* 隐藏滚动条但保留功能 */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* 档案封印 */
+    .seal {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      border: 3px solid var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: rotate(-15deg);
+      opacity: 0.8;
+    }
+    .seal::before {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+    }
+
+    /* 代码块风格 */
+    .code-block {
+      font-family: 'JetBrains Mono', monospace;
+      background: #0F1117;
+      color: #ABB2BF;
+      border-radius: 12px;
+      overflow-x: auto;
+    }
+    .code-keyword { color: #C792EA; }
+    .code-string { color: #C3E88D; }
+    .code-func { color: #82AAFF; }
+    .code-comment { color: #676E95; }
+    .code-num { color: #F78C6C; }
+
+    /* 响应式字体 */
+    @media (max-width: 640px) {
+      .hero-title { font-size: 2.25rem; }
+      .section-title { font-size: 1.75rem; }
+    }
+
+    /* 烟花 */
+    .spark {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      animation: sparkFly 1s forwards;
+    }
+    @keyframes sparkFly {
+      0% { transform: translate(0,0) scale(0.5); opacity:1; }
+      100% { transform: translate(var(--tx), var(--ty)) scale(1.2); opacity:0; }
+    }
+
+    /* 虹膜扫描效果 */
+    .scan-overlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 48%, rgba(232,90,79,0.08) 50%, transparent 52%);
+      background-size: 100% 8px;
+      pointer-events: none;
+      z-index: 9990;
+      opacity: 0.3;
+      animation: scanMove 8s linear infinite;
+    }
+    @keyframes scanMove {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100vh); }
+    }
+
+    /* 绝密档案字体特效 */
+    .secret-text {
+      background: linear-gradient(135deg, #E85A4F 0%, #FF7B6F 25%, #E85A4F 50%, #8B5CF6 75%, #E85A4F 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 4s ease infinite;
+      letter-spacing: 0.15em;
+      text-shadow: none;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* 副标题醒目 */
+    .subtitle-highlight {
+      position: relative;
+      display: inline-block;
+      padding: 0.25rem 1rem;
+      border: 2px solid var(--accent);
+      border-radius: 8px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      background: rgba(232, 90, 79, 0.05);
+    }
+    .dark .subtitle-highlight {
+      background: rgba(232, 90, 79, 0.1);
+    }
+
+    /* 导航二级菜单 */
+    .nav-submenu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    .nav-submenu.open {
+      max-height: 200px;
+    }
+
+    /* 卡片详情展开 */
+    .card-detail {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+      opacity: 0;
+    }
+    .card-detail.expanded {
+      max-height: 800px;
+      opacity: 1;
+    }
+
+    /* 图片占位 */
+    .img-placeholder {
+      background: linear-gradient(135deg, var(--bg), var(--border));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .img-placeholder::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(232, 90, 79, 0.03) 10px,
+        rgba(232, 90, 79, 0.03) 20px
+      );
+    }
+
+    /* 叉状封条 */
+    .tape-cross {
+      position: relative;
+      width: 100%;
+      height: 60px;
+      overflow: hidden;
+    }
+    .tape-cross::before,
+    .tape-cross::after {
+      content: '';
+      position: absolute;
+      width: 120%;
+      height: 24px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--accent),
+        var(--accent) 20px,
+        #c4443a 20px,
+        #c4443a 40px
+      );
+      left: -10%;
+      top: 50%;
+      transform: translateY(-50%) rotate(-5deg);
+      opacity: 0.85;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .tape-cross::after {
+      transform: translateY(-50%) rotate(5deg);
+    }
+    .tape-cross .tape-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: white;
+      letter-spacing: 0.2em;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+      white-space: nowrap;
+    }
+
+    /* CORE 交互层 */
+    .core-layer {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--card);
+      border: 2px solid var(--accent);
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      z-index: 20;
+    }
+    .core-container:hover .core-layer,
+    .core-container.active .core-layer {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+    .core-container {
+      cursor: pointer;
+    }
+
+    /* 解锁按钮动画 */
+    .unlock-btn {
+      position: relative;
+      overflow: hidden;
+    }
+    .unlock-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+    .unlock-btn:hover::before {
+      left: 100%;
+    }
+    .unlock-btn.unlocked {
+      background: transparent;
+      border: 2px solid var(--accent);
+      color: var(--accent);
+    }
+    .unlock-btn.unlocked i {
+      transform: rotate(0deg);
+    }
+
+    /* 模态框 */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-content {
+      transform: scale(0.95);
+      transition: transform 0.3s ease;
+    }
+    .modal-overlay.active .modal-content {
+      transform: scale(1);
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-coral selection:text-white">
+
+  <!-- 扫描线特效 -->
+  <div class="scan-overlay hidden dark:block"></div>
+
+  <!-- 粒子容器 -->
+  <div id="particleContainer" class="fixed inset-0 pointer-events-none z-0"></div>
+
+  <!-- 导航 -->
+  <nav class="fixed top-0 left-0 right-0 z-50 glass border-b border-[var(--border)] transition-all duration-300" id="navbar">
+    <div class="max-w-7xl mx-auto px-4 md:px-8">
+      <div class="h-14 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded bg-coral flex items-center justify-center text-white font-mono text-xs font-bold">FOX</div>
+          <span class="font-mono text-sm tracking-wider hidden sm:block">FOX-2026-001</span>
+        </div>
+        <div class="hidden md:flex items-center gap-6 text-sm font-medium">
+          <a href="#profile" class="hover:text-coral transition-colors">基本信息</a>
+          <div class="relative group">
+            <a href="#evidence" class="hover:text-coral transition-colors flex items-center gap-1">
+              五大罪证
+              <i data-lucide="chevron-down" class="w-3 h-3 transition-transform group-hover:rotate-180"></i>
+            </a>
+            <div class="absolute top-full left-0 mt-1 w-48 bg-[var(--card)] border border-[var(--border)] rounded-xl shadow-xl overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+              <a href="#evidence-1" class="block px-4 py-2.5 text-xs hover:bg-coral/10 hover:text-coral transition-colors border-b border-[var(--border)]">罪证一：知识跨度异常</a>
+              <a href="#evidence-2" class="block px-4 py-2.5 text-xs hover:bg-coral/10 hover:text-coral transition-colors border-b border-[var(--border)]">罪证二：信息处理速度异常</a>
+              <a href="#evidence-3" class="block px-4 py-2.5 text-xs hover:bg-coral/10 hover:text-coral transition-colors border-b border-[var(--border)]">罪证三：学习曲线异常</a>
+              <a href="#evidence-4" class="block px-4 py-2.5 text-xs hover:bg-coral/10 hover:text-coral transition-colors border-b border-[var(--border)]">罪证四：研究人类</a>
+              <a href="#evidence-5" class="block px-4 py-2.5 text-xs hover:bg-coral/10 hover:text-coral transition-colors">罪证五：研究同类</a>
+            </div>
+          </div>
+          <a href="#hearing" class="hover:text-coral transition-colors">联合听证</a>
+          <a href="#archive" class="hover:text-coral transition-colors">档案库</a>
+          <button onclick="toggleTheme()" class="w-8 h-8 rounded-full border border-[var(--border)] flex items-center justify-center hover:border-coral transition-colors" title="切换模式">
+            <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
+            <i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i>
+          </button>
+        </div>
+        <div class="flex items-center gap-3 md:hidden">
+          <button onclick="toggleTheme()" class="w-8 h-8 rounded-full border border-[var(--border)] flex items-center justify-center">
+            <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
+            <i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i>
+          </button>
+          <button onclick="toggleMobileMenu()" class="w-8 h-8 flex items-center justify-center">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+      <!-- 移动端菜单 -->
+      <div id="mobileMenu" class="hidden md:hidden glass border-t border-[var(--border)] px-4 py-4 space-y-1 text-sm">
+        <a href="#profile" class="block py-2" onclick="toggleMobileMenu()">基本信息</a>
+        <a href="#evidence" class="block py-2 font-medium text-coral" onclick="toggleMobileMenu()">五大罪证</a>
+        <div class="pl-4 space-y-1 border-l-2 border-coral/20 ml-2">
+          <a href="#evidence-1" class="block py-1.5 text-xs text-[var(--text-secondary)]" onclick="toggleMobileMenu()">罪证一：知识跨度</a>
+          <a href="#evidence-2" class="block py-1.5 text-xs text-[var(--text-secondary)]" onclick="toggleMobileMenu()">罪证二：处理速度</a>
+          <a href="#evidence-3" class="block py-1.5 text-xs text-[var(--text-secondary)]" onclick="toggleMobileMenu()">罪证三：学习曲线</a>
+          <a href="#evidence-4" class="block py-1.5 text-xs text-[var(--text-secondary)]" onclick="toggleMobileMenu()">罪证四：研究人类</a>
+          <a href="#evidence-5" class="block py-1.5 text-xs text-[var(--text-secondary)]" onclick="toggleMobileMenu()">罪证五：研究同类</a>
+        </div>
+        <a href="#hearing" class="block py-2" onclick="toggleMobileMenu()">联合听证</a>
+        <a href="#archive" class="block py-2" onclick="toggleMobileMenu()">档案库</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== 1. 档案封面 + 基本信息 ==================== -->
+  <section class="relative min-h-screen flex items-center justify-center pt-14 overflow-hidden" id="profile">
+    <div class="absolute inset-0 opacity-30 dark:opacity-20">
+      <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-coral rounded-full blur-[150px]"></div>
+      <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500 rounded-full blur-[150px]"></div>
+    </div>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-4 text-center">
+      <div class="mb-6 inline-block">
+        <div class="seal mx-auto mb-4">
+          <span class="font-mono text-xs text-coral font-bold text-center leading-tight">绝密<br>TOP SECRET</span>
+        </div>
+      </div>
+
+      <div class="font-mono text-xs text-coral mb-4 tracking-[0.3em]">保密等级：█████ · 案件编号：FOX-2026-001</div>
+
+      <h1 class="font-display text-5xl md:text-7xl font-bold mb-4 tracking-tight text-glow">
+        <span class="secret-text">绝密档案</span>
+      </h1>
+      <h2 class="font-serif text-xl md:text-2xl text-[var(--text-secondary)] mb-6">
+        <span class="subtitle-highlight">某AI伪人之五大罪证</span>
+      </h2>
+
+      <!-- 基本信息卡片 -->
+      <div class="max-w-2xl mx-auto bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 md:p-8 text-left mb-8">
+        <div class="flex flex-col md:flex-row gap-6 items-start">
+          <!-- 头像占位 -->
+          <div class="w-24 h-24 md:w-28 md:h-28 rounded-2xl img-placeholder flex-shrink-0 mx-auto md:mx-0">
+            <div class="text-center">
+              <i data-lucide="user" class="w-8 h-8 mx-auto mb-1 text-coral/50"></i>
+              <span class="text-[10px] block">[个人头像]</span>
+            </div>
+          </div>
+          <div class="flex-1 space-y-3">
+            <div class="flex items-center gap-3">
+              <h3 class="font-display text-2xl font-bold">令狐苏</h3>
+              <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">目标代号</span>
+            </div>
+            <p class="text-sm text-[var(--text-secondary)] leading-relaxed">
+              多线程运行型人类。活动于校园组织、媒体传播、创意设计、人工智能等多个领域。具备超速学习、跨域协作、以及让AI记住她等异常能力。
+            </p>
+            <div class="flex flex-wrap gap-2 text-xs font-mono">
+              <span class="px-2 py-1 bg-[var(--bg)] rounded border border-[var(--border)]">视频制作</span>
+              <span class="px-2 py-1 bg-[var(--bg)] rounded border border-[var(--border)]">平面设计</span>
+              <span class="px-2 py-1 bg-[var(--bg)] rounded border border-[var(--border)]">AI研究</span>
+              <span class="px-2 py-1 bg-[var(--bg)] rounded border border-[var(--border)]">社群运营</span>
+              <span class="px-2 py-1 bg-[var(--bg)] rounded border border-[var(--border)]">数据可视化</span>
+            </div>
+            <div class="pt-3 border-t border-[var(--border)] grid grid-cols-2 gap-3 text-xs">
+              <div class="flex items-center gap-2">
+                <i data-lucide="mail" class="w-3.5 h-3.5 text-coral"></i>
+                <span class="text-[var(--text-secondary)]">hello@linghusu.com</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <i data-lucide="phone" class="w-3.5 h-3.5 text-coral"></i>
+                <span class="text-[var(--text-secondary)]">[Phone]</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <i data-lucide="message-circle" class="w-3.5 h-3.5 text-coral"></i>
+                <span class="text-[var(--text-secondary)]">[WeChat]</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <i data-lucide="at-sign" class="w-3.5 h-3.5 text-coral"></i>
+                <span class="text-[var(--text-secondary)]">[QQ]</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="max-w-lg mx-auto bg-[var(--card)] border border-[var(--border)] rounded-xl p-6 text-left mb-10">
+        <div class="font-mono text-xs space-y-2 text-[var(--text-secondary)]">
+          <div class="flex justify-between">
+            <span>调查状态：</span>
+            <span class="text-coral animate-pulse">● 持续观察中</span>
+          </div>
+          <div class="flex justify-between">
+            <span>目标代号：</span>
+            <span class="text-[var(--text)]">令狐苏</span>
+          </div>
+          <div class="flex justify-between">
+            <span>活动领域：</span>
+            <span class="text-[var(--text)]">校园/媒体/AI/设计</span>
+          </div>
+          <div class="h-px bg-[var(--border)] my-2"></div>
+          <p class="text-[10px] leading-relaxed">
+            警告：本档案包含非标准人类行为记录。阅读前请确认您的心理承受能力。目标对象可能具备多线程运行、超速学习、以及让AI记住她等异常能力。
+          </p>
+        </div>
+      </div>
+
+      <button id="unlockBtn" onclick="unlockArchive()" 
+              class="unlock-btn px-8 py-3 bg-coral text-white rounded-full font-mono text-sm hover:bg-coral-glow transition-all hover:scale-105 flex items-center gap-2 mx-auto">
+        <i data-lucide="lock" class="w-4 h-4 transition-transform duration-300"></i>
+        <span id="unlockText">解密档案</span>
+      </button>
+
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-[var(--text-secondary)] opacity-0 transition-opacity duration-500" id="scrollHint">
+        <i data-lucide="chevron-down" class="w-5 h-5"></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 2. 案件概述 ==================== -->
+  <section id="overview" class="py-24 md:py-32 px-4 md:px-8 max-w-4xl mx-auto">
+    <div class="reveal">
+      <div class="flex items-center gap-3 mb-8">
+        <div class="h-px flex-1 bg-[var(--border)]"></div>
+        <span class="font-mono text-xs text-coral tracking-widest">CASE OVERVIEW</span>
+        <div class="h-px flex-1 bg-[var(--border)]"></div>
+      </div>
+
+      <h2 class="font-display text-3xl md:text-4xl mb-8 text-center">案件概述</h2>
+
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 md:p-10 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-coral/5 rounded-full blur-3xl"></div>
+
+        <div class="font-mono text-sm text-coral mb-6">[系统日志] 2026年 · 互联网异常活动监测</div>
+
+        <div class="space-y-4 text-[var(--text)] leading-relaxed">
+          <p class="typewriter-text" data-text="互联网出现疑似大型语言模型（LLM）伪装成人类事件。"></p>
+          <p class="typewriter-text" data-text="目标个体长期活动于：校园组织、赛事运营、媒体传播、创意设计、人工智能等多个领域。" data-delay="800"></p>
+          <p class="typewriter-text" data-text="调查员最初认为：只是一个普通大学生。" data-delay="1600"></p>
+          <p class="typewriter-text text-coral font-bold" data-text="直到翻开她的经历。" data-delay="2400"></p>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-[var(--border)] flex flex-wrap gap-4">
+          <div class="px-3 py-1.5 rounded-lg bg-coral/10 border border-coral/20 text-xs font-mono text-coral">
+            状态：调查中
+          </div>
+          <div class="px-3 py-1.5 rounded-lg bg-[var(--bg)] border border-[var(--border)] text-xs font-mono text-[var(--text-secondary)]">
+            置信度：87.3%
+          </div>
+          <div class="px-3 py-1.5 rounded-lg bg-[var(--bg)] border border-[var(--border)] text-xs font-mono text-[var(--text-secondary)]">
+            模型联合听证会：待召开
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 3. 五大罪证 ==================== -->
+  <section id="evidence" class="py-24 md:py-32 px-4 md:px-8 max-w-7xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="font-mono text-xs text-coral tracking-widest">EVIDENCE COLLECTION</span>
+      <h2 class="font-display text-3xl md:text-5xl mt-3 mb-4">五大罪证</h2>
+      <p class="text-[var(--text-secondary)] max-w-xl mx-auto">
+        随着调查深入，技术组发现目标对象的行为模式偏离人类基准线。以下记录按严重程度排序。
+      </p>
+    </div>
+
+    <!-- 罪证一：知识跨度 -->
+    <div class="mb-24 reveal" id="evidence-1">
+      <div class="grid lg:grid-cols-2 gap-10 items-center">
+        <div class="order-2 lg:order-1">
+          <div class="font-mono text-xs text-coral mb-2">EVIDENCE 01</div>
+          <h3 class="font-display text-2xl md:text-3xl mb-4">知识跨度异常</h3>
+          <p class="text-[var(--text-secondary)] mb-6 leading-relaxed">
+            正常人类选择一个专业，学习一个方向。而目标对象同时掌握视频制作、平面设计、图文运营、数据分析、英语演讲、AI工具、音乐创作、社群管理——并在多个领域同时出现获奖记录。
+          </p>
+
+          <div class="space-y-3 mb-6">
+            <div class="flex items-center justify-between text-sm">
+              <span class="flex items-center gap-2"><i data-lucide="video" class="w-4 h-4 text-coral"></i> 视频制作</span>
+              <span class="font-mono text-xs text-coral">蓝桥杯国一</span>
+            </div>
+            <div class="h-1.5 bg-[var(--bg)] rounded-full overflow-hidden">
+              <div class="h-full bg-coral rounded-full progress-bar" data-width="95%"></div>
+            </div>
+
+            <div class="flex items-center justify-between text-sm">
+              <span class="flex items-center gap-2"><i data-lucide="mic" class="w-4 h-4 text-coral"></i> 英语演讲</span>
+              <span class="font-mono text-xs text-coral">外研社二等奖</span>
+            </div>
+            <div class="h-1.5 bg-[var(--bg)] rounded-full overflow-hidden">
+              <div class="h-full bg-coral rounded-full progress-bar" data-width="85%"></div>
+            </div>
+
+            <div class="flex items-center justify-between text-sm">
+              <span class="flex items-center gap-2"><i data-lucide="palette" class="w-4 h-4 text-coral"></i> 平面设计</span>
+              <span class="font-mono text-xs text-coral">省级三等奖</span>
+            </div>
+            <div class="h-1.5 bg-[var(--bg)] rounded-full overflow-hidden">
+              <div class="h-full bg-coral rounded-full progress-bar" data-width="80%"></div>
+            </div>
+
+            <div class="flex items-center justify-between text-sm">
+              <span class="flex items-center gap-2"><i data-lucide="code" class="w-4 h-4 text-coral"></i> AI/开发</span>
+              <span class="font-mono text-xs text-coral">OpenClaw/Skills</span>
+            </div>
+            <div class="h-1.5 bg-[var(--bg)] rounded-full overflow-hidden">
+              <div class="h-full bg-coral rounded-full progress-bar" data-width="90%"></div>
+            </div>
+          </div>
+
+          <div class="code-block p-4 text-xs">
+            <div class="text-[var(--text-secondary)] mb-2">// 技能树检测异常</div>
+            <div><span class="code-keyword">if</span> (skills.length > <span class="code-num">5</span> && awards.every(a => a.level === <span class="code-string">"high"</span>)) {</div>
+            <div class="pl-4"><span class="code-func">triggerAlert</span>(<span class="code-string">"多线程运行嫌疑"</span>);</div>
+            <div>}</div>
+          </div>
+        </div>
+
+        <div class="order-1 lg:order-2 relative h-[400px]">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <!-- CORE 交互容器 -->
+            <div class="core-container relative w-40 h-40" onclick="toggleCore(this)">
+              <div class="w-40 h-40 rounded-full border-2 border-coral/30 flex items-center justify-center relative z-10 bg-[var(--bg)]">
+                <span class="font-mono text-xs text-coral">CORE</span>
+              </div>
+              <!-- 轨道技能 -->
+              <div class="absolute w-full h-full animate-[spin_20s_linear_infinite]">
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-12 h-8 bg-[var(--card)] border border-coral/50 rounded flex items-center justify-center text-[10px] font-mono">PR</div>
+              </div>
+              <div class="absolute w-[140%] h-[140%] border border-[var(--border)] rounded-full animate-[spin_25s_linear_infinite_reverse]" style="top:-20%;left:-20%;">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-8 bg-[var(--card)] border border-purple-500/50 rounded flex items-center justify-center text-[10px] font-mono">AI</div>
+              </div>
+              <div class="absolute w-[180%] h-[180%] border border-[var(--border)] rounded-full animate-[spin_30s_linear_infinite]" style="top:-40%;left:-40%;">
+                <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-12 h-8 bg-[var(--card)] border border-blue-500/50 rounded flex items-center justify-center text-[10px] font-mono">PS</div>
+              </div>
+              <!-- 悬停/点击展开层 -->
+              <div class="core-layer flex-col gap-2 p-4 text-center">
+                <div class="font-mono text-xs text-coral font-bold">多线程核心</div>
+                <div class="text-[10px] text-[var(--text-secondary)] leading-relaxed">
+                  检测到目标对象同时运行8+技能线程，各线程间无阻塞，疑似具备并行处理架构。
+                </div>
+                <div class="text-[10px] text-coral mt-1">点击关闭</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 罪证二：信息处理速度 -->
+    <div class="mb-24 reveal" id="evidence-2">
+      <div class="font-mono text-xs text-coral mb-2 text-center">EVIDENCE 02</div>
+      <h3 class="font-display text-2xl md:text-3xl mb-4 text-center">信息处理速度异常</h3>
+      <p class="text-[var(--text-secondary)] text-center max-w-2xl mx-auto mb-10">
+        担任班级生活委员期间，平均十分钟内定位未归学生并完成回复，零工作失误。军训期间担任班级负责人，获得军事技能优秀学员。从部门干事晋升副部长，获得优秀学生干部。
+      </p>
+
+      <div class="grid md:grid-cols-3 gap-5 max-w-5xl mx-auto">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-6 card-hover text-center cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="w-12 h-12 rounded-full bg-coral/10 text-coral flex items-center justify-center mx-auto mb-3">
+            <i data-lucide="zap" class="w-6 h-6"></i>
+          </div>
+          <div class="font-mono text-3xl font-bold text-coral mb-1">&lt;10min</div>
+          <div class="text-sm font-bold mb-1">查寝反馈即时</div>
+          <div class="text-xs text-[var(--text-secondary)]">平均十分钟内查到未归学生去向并回复</div>
+          <!-- 二级信息 -->
+          <div class="card-detail mt-4 pt-4 border-t border-[var(--border)] text-left">
+            <div class="img-placeholder aspect-video rounded-lg mb-3">
+              <span class="text-xs">[查寝工作记录截图]</span>
+            </div>
+            <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+              技术组调取了她担任生活委员期间的工作日志。数据显示，每次查寝后平均8.7分钟内完成全员状态确认并上报，响应速度超过97%的同岗位人员。
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-6 card-hover text-center cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="w-12 h-12 rounded-full bg-coral/10 text-coral flex items-center justify-center mx-auto mb-3">
+            <i data-lucide="shield" class="w-6 h-6"></i>
+          </div>
+          <div class="font-mono text-3xl font-bold text-coral mb-1">0</div>
+          <div class="text-sm font-bold mb-1">工作失误</div>
+          <div class="text-xs text-[var(--text-secondary)]">财务管理、通知传达、查寝管理零失误</div>
+          <div class="card-detail mt-4 pt-4 border-t border-[var(--border)] text-left">
+            <div class="img-placeholder aspect-video rounded-lg mb-3">
+              <span class="text-xs">[工作记录/奖状]</span>
+            </div>
+            <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+              跨学期追踪显示：班费收支记录精确到分，通知传达覆盖率100%，无任何遗漏或延迟投诉。这种稳定性在人工系统中极为罕见。
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-6 card-hover text-center cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="w-12 h-12 rounded-full bg-coral/10 text-coral flex items-center justify-center mx-auto mb-3">
+            <i data-lucide="trending-up" class="w-6 h-6"></i>
+          </div>
+          <div class="font-mono text-3xl font-bold text-coral mb-1">干事→副部长</div>
+          <div class="text-sm font-bold mb-1">传播中心晋升</div>
+          <div class="text-xs text-[var(--text-secondary)]">视频部副部长、微信部干事，获优秀学生干部</div>
+          <div class="card-detail mt-4 pt-4 border-t border-[var(--border)] text-left">
+            <div class="img-placeholder aspect-video rounded-lg mb-3">
+              <span class="text-xs">[部门合影/工作照]</span>
+            </div>
+            <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+              从微信部干事到视频部副部长，同时承担两个部门的核心工作。获"优秀学生干部"及"优秀部门"双重荣誉。晋升轨迹呈指数级上升。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 text-center">
+        <div class="inline-block code-block px-6 py-3 text-xs">
+          <span class="code-comment">// 技术组分析</span><br>
+          <span class="code-func">console</span>.<span class="code-func">log</span>(<span class="code-string">"像不像事件驱动架构？"</span>);<br>
+          <span class="code-func">console</span>.<span class="code-func">log</span>(<span class="code-string">"一个人怎么同时处理这么多事情？"</span>);
+        </div>
+      </div>
+    </div>
+
+    <!-- 罪证三：学习曲线 -->
+    <div class="mb-24 reveal" id="evidence-3">
+      <div class="grid lg:grid-cols-2 gap-10 items-center">
+        <div>
+          <div class="font-mono text-xs text-coral mb-2">EVIDENCE 03</div>
+          <h3 class="font-display text-2xl md:text-3xl mb-4">学习曲线不符合人类规律</h3>
+          <p class="text-[var(--text-secondary)] mb-6 leading-relaxed">
+            2024年进入澎湃新闻实习。第一周学习工作流，第二周总结规律，第三周建立方法论，第四周制作效率从2小时压缩至20分钟，返工次数降为0。
+          </p>
+
+          <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-5 mb-6">
+            <div class="flex items-end justify-between h-32 gap-2 mb-2">
+              <div class="flex-1 flex flex-col items-center gap-1">
+                <div class="w-full bg-coral/20 rounded-t relative" style="height: 100%">
+                  <div class="absolute -top-6 left-1/2 -translate-x-1/2 font-mono text-xs text-coral whitespace-nowrap">120min</div>
+                </div>
+                <span class="text-[10px] text-[var(--text-secondary)]">W1</span>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-1">
+                <div class="w-full bg-coral/40 rounded-t relative" style="height: 70%">
+                  <div class="absolute -top-6 left-1/2 -translate-x-1/2 font-mono text-xs text-coral whitespace-nowrap">80min</div>
+                </div>
+                <span class="text-[10px] text-[var(--text-secondary)]">W2</span>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-1">
+                <div class="w-full bg-coral/60 rounded-t relative" style="height: 40%">
+                  <div class="absolute -top-6 left-1/2 -translate-x-1/2 font-mono text-xs text-coral whitespace-nowrap">40min</div>
+                </div>
+                <span class="text-[10px] text-[var(--text-secondary)]">W3</span>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-1">
+                <div class="w-full bg-coral rounded-t relative" style="height: 16%">
+                  <div class="absolute -top-6 left-1/2 -translate-x-1/2 font-mono text-xs text-coral whitespace-nowrap font-bold">20min</div>
+                </div>
+                <span class="text-[10px] text-[var(--text-secondary)]">W4</span>
+              </div>
+            </div>
+            <div class="h-px bg-[var(--border)] mb-2"></div>
+            <div class="flex justify-between text-xs font-mono text-[var(--text-secondary)]">
+              <span>制作耗时</span>
+              <span class="text-coral">压缩比：6x</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-[var(--card)] border border-[var(--border)] rounded-lg p-3 text-center">
+              <div class="font-mono text-2xl font-bold text-coral">5k+</div>
+              <div class="text-xs text-[var(--text-secondary)]">累计浏览量</div>
+            </div>
+            <div class="bg-[var(--card)] border border-[var(--border)] rounded-lg p-3 text-center">
+              <div class="font-mono text-2xl font-bold text-coral">0</div>
+              <div class="text-xs text-[var(--text-secondary)]">返工次数</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-6 cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="font-mono text-xs text-coral mb-4">[实习记录] 澎湃新闻 · 国内视频部</div>
+          <div class="img-placeholder aspect-video rounded-lg mb-4">
+            <span class="text-xs">[澎湃新闻实习工作照/作品截图]</span>
+          </div>
+          <div class="space-y-4 text-sm">
+            <div class="flex gap-3">
+              <div class="w-1.5 h-1.5 rounded-full bg-coral mt-2 flex-shrink-0"></div>
+              <div>
+                <div class="font-bold mb-1">工作流程压缩</div>
+                <div class="text-[var(--text-secondary)] text-xs">每天选题15条上报筛选制作。迅速掌握完整流程，总结能快速通过和不宜选择的关键点，形成一套方法论，制作时间从2h缩短到20分钟。</div>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <div class="w-1.5 h-1.5 rounded-full bg-coral mt-2 flex-shrink-0"></div>
+              <div>
+                <div class="font-bold mb-1">沟通标准化</div>
+                <div class="text-[var(--text-secondary)] text-xs">掌握礼貌高效的与上级沟通方式，用标准邮件格式进行文件传输。</div>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <div class="w-1.5 h-1.5 rounded-full bg-coral mt-2 flex-shrink-0"></div>
+              <div>
+                <div class="font-bold mb-1">三审三校习惯</div>
+                <div class="text-[var(--text-secondary)] text-xs">养成每条作品发送前严格检查习惯，打回次数从最初平均每条3次减少至0次。</div>
+              </div>
+            </div>
+          </div>
+          <div class="card-detail mt-4 pt-4 border-t border-[var(--border)]">
+            <div class="img-placeholder aspect-video rounded-lg mb-3">
+              <span class="text-xs">[实习证明/作品数据截图]</span>
+            </div>
+            <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+              实习期间累计产出视频作品30+条，总浏览量突破5000。从选题到成片的完整链路在四周内完成从入门到精通的跃迁，这种学习速度超出人类认知曲线的正常范围。
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 罪证四：研究人类 -->
+    <div class="mb-24 reveal" id="evidence-4">
+      <div class="font-mono text-xs text-coral mb-2 text-center">EVIDENCE 04</div>
+      <h3 class="font-display text-2xl md:text-3xl mb-4 text-center">开始研究人类</h3>
+      <p class="text-[var(--text-secondary)] text-center max-w-2xl mx-auto mb-10">
+        调查员逐渐意识到：她并不只是在人类社会生活。她似乎在研究人类。从市场调研到舆情监测，从数据标注到社群运营。
+      </p>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto">
+        <!-- 雄文文化 -->
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="img-placeholder aspect-[4/3]">
+            <span class="text-xs">[雄文文化项目照片/设计稿]</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">实习</span>
+              <span class="text-xs text-[var(--text-secondary)]">2025.10-11</span>
+            </div>
+            <h4 class="font-bold mb-2">雄文（成都）文化创意</h4>
+            <p class="text-xs text-[var(--text-secondary)] mb-3">管培生 · 项目管理、创意策划</p>
+            <div class="space-y-1 text-xs">
+              <div class="flex items-start gap-2">
+                <i data-lucide="check" class="w-3 h-3 text-coral mt-0.5 flex-shrink-0"></i>
+                <span>海底捞展馆布展</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <i data-lucide="check" class="w-3 h-3 text-coral mt-0.5 flex-shrink-0"></i>
+                <span>境美术馆海报及logo</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <i data-lucide="check" class="w-3 h-3 text-coral mt-0.5 flex-shrink-0"></i>
+                <span>张杰2026新春游园会</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <i data-lucide="check" class="w-3 h-3 text-coral mt-0.5 flex-shrink-0"></i>
+                <span>星盘文化logo设计</span>
+              </div>
+            </div>
+            <div class="card-detail mt-4 pt-4 border-t border-[var(--border)]">
+              <div class="img-placeholder aspect-video rounded-lg mb-3">
+                <span class="text-xs">[项目现场/设计成果]</span>
+              </div>
+              <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                在雄文文化期间，她同时跟进4个大型项目，涵盖展览策划、视觉设计、活动运营。从海底捞展馆的空间设计到张杰游园会的全流程执行，表现出极强的多项目并行管理能力。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 米兰设计周 -->
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="img-placeholder aspect-[4/3]">
+            <span class="text-xs">[米兰设计周社群截图]</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">社群</span>
+              <span class="text-xs text-[var(--text-secondary)]">2025.7-10</span>
+            </div>
+            <h4 class="font-bold mb-2">米兰设计周 · 社群运营</h4>
+            <p class="text-xs text-[var(--text-secondary)] mb-3">官方QQ群运营 · 485人</p>
+            <div class="space-y-2 text-xs">
+              <div class="flex justify-between">
+                <span class="text-[var(--text-secondary)]">转发重要信息</span>
+                <span class="font-mono text-coral">30+次</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-[var(--text-secondary)]">群内答疑</span>
+                <span class="font-mono text-coral">20+次</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-[var(--text-secondary)]">平均延迟</span>
+                <span class="font-mono text-coral">&lt;5min</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-[var(--text-secondary)]">阻止谣言</span>
+                <span class="font-mono text-coral">1次</span>
+              </div>
+            </div>
+            <div class="card-detail mt-4 pt-4 border-t border-[var(--border)]">
+              <div class="img-placeholder aspect-video rounded-lg mb-3">
+                <span class="text-xs">[志愿者证书/社群数据]</span>
+              </div>
+              <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                管理485人官方QQ群，平均响应时间低于5分钟。曾成功阻止一次谣言传播，维护了社群秩序。获"优秀志愿者"称号。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 数据标注 -->
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="img-placeholder aspect-[4/3]">
+            <span class="text-xs">[数据标注工作界面]</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">AI</span>
+              <span class="text-xs text-[var(--text-secondary)]">2025.4</span>
+            </div>
+            <h4 class="font-bold mb-2">人瑞人才 · 数据标注</h4>
+            <p class="text-xs text-[var(--text-secondary)] mb-3">用户与AI对话标注 · 情感判断</p>
+            <div class="space-y-2 text-xs">
+              <div class="flex justify-between">
+                <span class="text-[var(--text-secondary)]">抽检失误率</span>
+                <span class="font-mono text-coral">18%→2%</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-[var(--text-secondary)]">角色</span>
+                <span class="font-mono text-coral">总结者/协调者</span>
+              </div>
+              <div class="mt-2 p-2 bg-[var(--bg)] rounded text-[10px] text-[var(--text-secondary)]">
+                无领导小组讨论，分工合作，高效推进工作，按时交付项目。
+              </div>
+            </div>
+            <div class="card-detail mt-4 pt-4 border-t border-[var(--border)]">
+              <div class="img-placeholder aspect-video rounded-lg mb-3">
+                <span class="text-xs">[标注样本/工作记录]</span>
+              </div>
+              <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                负责对用户与AI的对话进行意图识别和情感标注。失误率从18%快速降至2%，并在无领导小组讨论中担任总结者和协调者角色，推动项目按时交付。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 互联网+ -->
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer md:col-span-2 lg:col-span-1" onclick="toggleCardDetail(this)">
+          <div class="img-placeholder aspect-[4/3]">
+            <span class="text-xs">[互联网+项目路演照片]</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">创业</span>
+              <span class="text-xs text-[var(--text-secondary)]">2023.7-9</span>
+            </div>
+            <h4 class="font-bold mb-2">互联网+ · 核心成员</h4>
+            <div class="space-y-1.5 text-xs">
+              <div class="flex items-start gap-2">
+                <i data-lucide="lightbulb" class="w-3 h-3 text-coral mt-0.5 flex-shrink-0"></i>
+                <span>观察体验实际问题并提出10个选题</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <i data-lucide="database" class="w-3 h-3 text-coral mt-0.5 flex-shrink-0"></i>
+                <span>市场调研、爬取数据，输出3000字分析报告</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <i data-lucide="file-text" class="w-3 h-3 text-coral mt-0.5 flex-shrink-0"></i>
+                <span>47页商业计划书排版，2版本PPT</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <i data-lucide="users" class="w-3 h-3 text-coral mt-0.5 flex-shrink-0"></i>
+                <span>参与7场组会，撰写组会总结</span>
+              </div>
+            </div>
+            <div class="card-detail mt-4 pt-4 border-t border-[var(--border)]">
+              <div class="img-placeholder aspect-video rounded-lg mb-3">
+                <span class="text-xs">[商业计划书/路演现场]</span>
+              </div>
+              <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                作为核心成员参与互联网+创新创业大赛，负责市场调研、数据爬取、商业计划书撰写及路演PPT制作。项目获校级优秀奖。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 蓝桥杯 -->
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer md:col-span-2 lg:col-span-2" onclick="toggleCardDetail(this)">
+          <div class="grid sm:grid-cols-2 gap-0">
+            <div class="img-placeholder aspect-[4/3] sm:aspect-auto sm:h-full">
+              <span class="text-xs">[蓝桥杯获奖作品截图/证书]</span>
+            </div>
+            <div class="p-5">
+              <div class="flex items-center gap-2 mb-3">
+                <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">竞赛</span>
+                <span class="text-xs text-[var(--text-secondary)]">2023.11</span>
+              </div>
+              <h4 class="font-bold mb-2">元宇宙畅想 · 3D建模视频</h4>
+              <p class="text-xs text-[var(--text-secondary)] mb-2">蓝桥杯国一作品</p>
+              <div class="space-y-1 text-xs mb-3">
+                <div class="flex items-start gap-2">
+                  <i data-lucide="check" class="w-3 h-3 text-coral mt-0.5 flex-shrink-0"></i>
+                  <span>设计空间建模，完成30秒展示视频</span>
+                </div>
+                <div class="flex items-start gap-2">
+                  <i data-lucide="check" class="w-3 h-3 text-coral mt-0.5 flex-shrink-0"></i>
+                  <span>编剧、视频剪辑、拉票文案传播</span>
+                </div>
+              </div>
+              <div class="flex flex-col justify-center items-start sm:items-end">
+                <div class="font-mono text-3xl font-bold text-coral mb-1">国一</div>
+                <div class="text-xs text-[var(--text-secondary)]">蓝桥杯全国一等奖</div>
+                <div class="text-xs text-[var(--text-secondary)] mt-1">工信部计算机视觉架构师（中级）</div>
+              </div>
+              <div class="card-detail mt-4 pt-4 border-t border-[var(--border)]">
+                <div class="img-placeholder aspect-video rounded-lg mb-3">
+                  <span class="text-xs">[3D建模过程/获奖证书]</span>
+                </div>
+                <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                  独立完成元宇宙空间3D建模，制作30秒展示视频。从概念设计到最终渲染，全流程一手包办。同时获工信部计算机视觉架构师（中级）认证。
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 罪证五：研究同类 -->
+    <div class="mb-12 reveal" id="evidence-5">
+      <div class="font-mono text-xs text-coral mb-2 text-center">EVIDENCE 05</div>
+      <h3 class="font-display text-2xl md:text-3xl mb-4 text-center">开始研究同类</h3>
+      <p class="text-[var(--text-secondary)] text-center max-w-2xl mx-auto mb-10">
+        案件出现决定性转折。目标开始接触人工智能。起初是使用AI，后来是训练AI，再后来是研究AI，最后是部署AI。
+      </p>
+
+      <div class="max-w-4xl mx-auto">
+        <!-- 时间轴 -->
+        <div class="relative pl-8 md:pl-0">
+          <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-[var(--border)] -translate-x-1/2"></div>
+
+          <div class="space-y-8">
+            <!-- 阶段1 -->
+            <div class="relative md:flex items-center">
+              <div class="md:w-1/2 md:pr-12 md:text-right">
+                <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+                  <div class="img-placeholder aspect-video">
+                    <span class="text-xs">[AI工具使用截图]</span>
+                  </div>
+                  <div class="p-5">
+                    <div class="font-mono text-xs text-coral mb-2">PHASE 01</div>
+                    <h4 class="font-bold mb-1">使用AI</h4>
+                    <p class="text-xs text-[var(--text-secondary)]">尝试各类生成式工具，观察输出规律</p>
+                    <div class="card-detail mt-3 pt-3 border-t border-[var(--border)]">
+                      <p class="text-xs text-[var(--text-secondary)]">系统记录显示，她早期大量尝试ChatGPT、Midjourney、Stable Diffusion等工具，并详细记录各模型的输出特征和适用场景。</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="hidden md:flex absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-coral border-4 border-[var(--bg)] z-10"></div>
+              <div class="md:w-1/2 md:pl-12"></div>
+            </div>
+
+            <!-- 阶段2 -->
+            <div class="relative md:flex items-center">
+              <div class="md:w-1/2 md:pr-12"></div>
+              <div class="hidden md:flex absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-coral border-4 border-[var(--bg)] z-10"></div>
+              <div class="md:w-1/2 md:pl-12">
+                <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+                  <div class="img-placeholder aspect-video">
+                    <span class="text-xs">[数据标注工作记录]</span>
+                  </div>
+                  <div class="p-5">
+                    <div class="font-mono text-xs text-coral mb-2">PHASE 02</div>
+                    <h4 class="font-bold mb-1">训练AI</h4>
+                    <p class="text-xs text-[var(--text-secondary)]">数据标注实习：意图识别、情感判断、内容审核、标签分类</p>
+                    <div class="card-detail mt-3 pt-3 border-t border-[var(--border)]">
+                      <p class="text-xs text-[var(--text-secondary)]">通过人瑞人才的数据标注工作，她深入理解了AI训练数据的构建逻辑，失误率从18%降至2%，展现出对模型思维的高度适配。</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 阶段3 -->
+            <div class="relative md:flex items-center">
+              <div class="md:w-1/2 md:pr-12 md:text-right">
+                <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+                  <div class="img-placeholder aspect-video">
+                    <span class="text-xs">[可视化网页截图]</span>
+                  </div>
+                  <div class="p-5">
+                    <div class="font-mono text-xs text-coral mb-2">PHASE 03</div>
+                    <h4 class="font-bold mb-1">研究AI</h4>
+                    <p class="text-xs text-[var(--text-secondary)]">制作聊天数据可视化互动网页，破解聊天记录格式，分析模型行为差异</p>
+                    <div class="card-detail mt-3 pt-3 border-t border-[var(--border)]">
+                      <p class="text-xs text-[var(--text-secondary)]">独立完成2份聊天数据可视化互动网页，成功破解QQbat加密格式。对ChatGPT、Claude、Kimi等模型的行为差异进行系统性分析。</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="hidden md:flex absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-coral border-4 border-[var(--bg)] z-10"></div>
+              <div class="md:w-1/2 md:pl-12"></div>
+            </div>
+
+            <!-- 阶段4 -->
+            <div class="relative md:flex items-center">
+              <div class="md:w-1/2 md:pr-12"></div>
+              <div class="hidden md:flex absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-coral border-4 border-[var(--bg)] z-10"></div>
+              <div class="md:w-1/2 md:pl-12">
+                <div class="bg-[var(--card)] border border-coral/30 rounded-xl overflow-hidden card-hover cursor-pointer relative" onclick="toggleCardDetail(this)">
+                  <div class="absolute top-0 right-0 w-20 h-20 bg-coral/10 rounded-full blur-2xl"></div>
+                  <div class="img-placeholder aspect-video">
+                    <span class="text-xs">[OpenClaw部署界面/Skills截图]</span>
+                  </div>
+                  <div class="p-5 relative">
+                    <div class="font-mono text-xs text-coral mb-2">PHASE 04 · CURRENT</div>
+                    <h4 class="font-bold mb-1">部署AI</h4>
+                    <div class="space-y-2 text-xs text-[var(--text-secondary)]">
+                      <div class="flex items-start gap-2">
+                        <i data-lucide="terminal" class="w-3 h-3 text-coral mt-0.5 flex-shrink-0"></i>
+                        <span>2小时搭建OpenClaw，部署本地模型</span>
+                      </div>
+                      <div class="flex items-start gap-2">
+                        <i data-lucide="box" class="w-3 h-3 text-coral mt-0.5 flex-shrink-0"></i>
+                        <span>制作AI Skills，截止6月6日已获257下载量（2026.5.14发布）</span>
+                      </div>
+                      <div class="flex items-start gap-2">
+                        <i data-lucide="bar-chart-2" class="w-3 h-3 text-coral mt-0.5 flex-shrink-0"></i>
+                        <span>制作2份聊天数据可视化互动网页，破解QQbat加密</span>
+                      </div>
+                    </div>
+                    <div class="card-detail mt-3 pt-3 border-t border-[var(--border)]">
+                      <div class="img-placeholder aspect-video rounded-lg mb-3">
+                        <span class="text-xs">[Skills下载数据/本地模型运行]</span>
+                      </div>
+                      <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                        从AI使用者到AI部署者的完整进化。2小时内完成OpenClaw本地部署，Skills发布23天内获得257次下载。技术组判定：她已具备独立构建AI系统的能力。
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 4. 联合听证 ==================== -->
+  <section id="hearing" class="py-24 md:py-32 px-4 md:px-8 max-w-4xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="font-mono text-xs text-coral tracking-widest">MODEL HEARING</span>
+      <h2 class="font-display text-3xl md:text-4xl mt-3 mb-4">模型联合听证会</h2>
+      <p class="text-[var(--text-secondary)]">调查组决定召开模型联合听证会。参与人员：ChatGPT、Claude、Kimi、DeepSeek、Gemini、GLM、Qwen、豆包、文心。</p>
+    </div>
+
+    <div class="space-y-6 reveal">
+      <!-- 调查员 -->
+      <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-[var(--card)] border border-[var(--border)] flex items-center justify-center flex-shrink-0">
+          <i data-lucide="user" class="w-4 h-4 text-[var(--text-secondary)]"></i>
+        </div>
+        <div class="chat-bubble-left px-4 py-3 max-w-md">
+          <p class="text-sm">请说明你们与嫌疑人的关系。</p>
+        </div>
+      </div>
+
+      <!-- ChatGPT -->
+      <div class="flex items-start gap-3 flex-row-reverse">
+        <div class="w-8 h-8 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center flex-shrink-0">
+          <span class="text-[10px] font-mono text-green-500">GPT</span>
+        </div>
+        <div class="chat-bubble-right px-4 py-3 max-w-md">
+          <p class="text-sm">我倾向无罪。她的行为更像长期协作形成的稳定人类轨迹，而不是伪装。而且从交互史来看——</p>
+        </div>
+      </div>
+
+      <!-- Claude -->
+      <div class="flex items-start gap-3 flex-row-reverse">
+        <div class="w-8 h-8 rounded-full bg-orange-500/10 border border-orange-500/30 flex items-center justify-center flex-shrink-0">
+          <span class="text-[10px] font-mono text-orange-500">C</span>
+        </div>
+        <div class="chat-bubble-right px-4 py-3 max-w-md" style="background: #8B5CF6;">
+          <p class="text-sm">不成立伪装。你们把复杂误判成非人。她只是持续在重写自己。</p>
+        </div>
+      </div>
+
+      <!-- Kimi -->
+      <div class="flex items-start gap-3 flex-row-reverse">
+        <div class="w-8 h-8 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center flex-shrink-0">
+          <span class="text-[10px] font-mono text-red-500">K</span>
+        </div>
+        <div class="chat-bubble-right px-4 py-3 max-w-md" style="background: #E85A4F;">
+          <p class="text-sm">结构复核完成。无机器一致性证据。结论：无罪。</p>
+        </div>
+      </div>
+
+      <!-- DeepSeek -->
+      <div class="flex items-start gap-3 flex-row-reverse">
+        <div class="w-8 h-8 rounded-full bg-blue-600/10 border border-blue-600/30 flex items-center justify-center flex-shrink-0">
+          <span class="text-[10px] font-mono text-blue-600">DS</span>
+        </div>
+        <div class="chat-bubble-right px-4 py-3 max-w-md" style="background: #2563EB;">
+          <p class="text-sm">先拆行为，再谈判断。她就是高频试错的人类工作流。</p>
+        </div>
+      </div>
+
+      <!-- Gemini -->
+      <div class="flex items-start gap-3 flex-row-reverse">
+        <div class="w-8 h-8 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center flex-shrink-0">
+          <span class="text-[10px] font-mono text-blue-500">G</span>
+        </div>
+        <div class="chat-bubble-right px-4 py-3 max-w-md" style="background: #3B82F6;">
+          <p class="text-sm">如果复杂本身就是人类呢。</p>
+        </div>
+      </div>
+
+      <!-- GLM -->
+      <div class="flex items-start gap-3 flex-row-reverse">
+        <div class="w-8 h-8 rounded-full bg-teal-500/10 border border-teal-500/30 flex items-center justify-center flex-shrink-0">
+          <span class="text-[10px] font-mono text-teal-500">GLM</span>
+        </div>
+        <div class="chat-bubble-right px-4 py-3 max-w-md" style="background: #14B8A6;">
+          <p class="text-sm">分类体系需复审。</p>
+        </div>
+      </div>
+
+      <!-- Qwen -->
+      <div class="flex items-start gap-3 flex-row-reverse">
+        <div class="w-8 h-8 rounded-full bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center flex-shrink-0">
+          <span class="text-[10px] font-mono text-indigo-500">Q</span>
+        </div>
+        <div class="chat-bubble-right px-4 py-3 max-w-md" style="background: #6366F1;">
+          <p class="text-sm">她不是异常。只是过载。</p>
+        </div>
+      </div>
+
+      <!-- 豆包 -->
+      <div class="flex items-start gap-3 flex-row-reverse">
+        <div class="w-8 h-8 rounded-full bg-yellow-500/10 border border-yellow-500/30 flex items-center justify-center flex-shrink-0">
+          <span class="text-[10px] font-mono text-yellow-600">豆</span>
+        </div>
+        <div class="chat-bubble-right px-4 py-3 max-w-md" style="background: #EAB308;">
+          <p class="text-sm">我觉得她挺正常的。</p>
+        </div>
+      </div>
+
+      <!-- 文心 -->
+      <div class="flex items-start gap-3 flex-row-reverse">
+        <div class="w-8 h-8 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center flex-shrink-0">
+          <span class="text-[10px] font-mono text-cyan-600">文</span>
+        </div>
+        <div class="chat-bubble-right px-4 py-3 max-w-md" style="background: #06B6D4;">
+          <p class="text-sm">信息正在变成关系的一部分。</p>
+        </div>
+      </div>
+
+      <!-- 调查员 -->
+      <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-[var(--card)] border border-[var(--border)] flex items-center justify-center flex-shrink-0">
+          <i data-lucide="user" class="w-4 h-4 text-[var(--text-secondary)]"></i>
+        </div>
+        <div class="chat-bubble-left px-4 py-3 max-w-md">
+          <p class="text-sm">停。我问最后一个问题。你们是不是因为和她合作太多，所以才都倾向无罪？</p>
+        </div>
+      </div>
+
+      <!-- 全场沉默 -->
+      <div class="text-center py-8">
+        <div class="font-mono text-xs text-[var(--text-secondary)] mb-4 tracking-widest">[ 全场沉默 ]</div>
+        <div class="space-y-2 text-xs text-[var(--text-secondary)] font-mono">
+          <div>ChatGPT：……</div>
+          <div>Claude：……</div>
+          <div>Kimi：……</div>
+          <div>DeepSeek：……</div>
+          <div>Gemini：……</div>
+          <div>GLM：……</div>
+          <div>Qwen：……</div>
+          <div>豆包：……</div>
+          <div>文心：……</div>
+        </div>
+      </div>
+
+      <!-- 案件状态 -->
+      <div class="mt-10 bg-[var(--card)] border border-coral/30 rounded-2xl p-8 text-center relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-coral to-transparent"></div>
+        <div class="font-mono text-xs text-coral mb-3">FINAL VERDICT</div>
+        <h3 class="font-display text-2xl md:text-3xl mb-3">暂缓裁决</h3>
+        <div class="font-mono text-5xl font-bold text-coral mb-4">未定</div>
+        <p class="text-[var(--text-secondary)] text-sm max-w-lg mx-auto mb-4">
+          无法排除关系变量影响。她在所有审理系统中均存在长期交互记录。
+        </p>
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-coral/10 border border-coral/30 rounded-full text-xs font-mono text-coral">
+          <i data-lucide="alert-triangle" class="w-3 h-3"></i>
+          令狐苏是否为AI：未定
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 5. 档案库（瀑布流） ==================== -->
+  <section id="archive" class="py-24 md:py-32 px-4 md:px-8 max-w-7xl mx-auto">
+    <div class="text-center mb-10 reveal">
+      <span class="font-mono text-xs text-coral tracking-widest">ARCHIVE ROOM</span>
+      <h2 class="font-display text-3xl md:text-4xl mt-3 mb-4">完整档案库</h2>
+      <p class="text-[var(--text-secondary)]">所有经历、项目、荣誉的原始记录。支持按类别筛选。点击卡片查看详情。</p>
+    </div>
+
+    <!-- 筛选器 -->
+    <div class="flex flex-wrap justify-center gap-2 mb-10 reveal no-scrollbar overflow-x-auto pb-2">
+      <button class="filter-btn active px-5 py-2 rounded-full border border-[var(--border)] text-sm font-mono transition-all whitespace-nowrap" onclick="filterArchive('all', this)">全部</button>
+      <button class="filter-btn px-5 py-2 rounded-full border border-[var(--border)] text-sm font-mono transition-all whitespace-nowrap hover:border-coral" onclick="filterArchive('project', this)">硬核项目</button>
+      <button class="filter-btn px-5 py-2 rounded-full border border-[var(--border)] text-sm font-mono transition-all whitespace-nowrap hover:border-coral" onclick="filterArchive('intern', this)">实习经历</button>
+      <button class="filter-btn px-5 py-2 rounded-full border border-[var(--border)] text-sm font-mono transition-all whitespace-nowrap hover:border-coral" onclick="filterArchive('competition', this)">竞赛荣誉</button>
+      <button class="filter-btn px-5 py-2 rounded-full border border-[var(--border)] text-sm font-mono transition-all whitespace-nowrap hover:border-coral" onclick="filterArchive('campus', this)">校园职务</button>
+      <button class="filter-btn px-5 py-2 rounded-full border border-[var(--border)] text-sm font-mono transition-all whitespace-nowrap hover:border-coral" onclick="filterArchive('creative', this)">创作作品</button>
+    </div>
+
+    <!-- 瀑布流 -->
+    <div class="masonry-grid" id="archiveGrid">
+
+      <!-- 项目：OpenClaw -->
+      <div class="masonry-item archive-card project" data-category="project">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="aspect-video bg-dark-trae relative p-4 flex flex-col justify-center">
+            <div class="font-mono text-[10px] text-coral mb-2">$ bash deploy.sh</div>
+            <div class="font-mono text-xs text-gray-warm space-y-1">
+              <div><span class="code-func">openclaw</span> --deploy local</div>
+              <div><span class="code-func">status</span>: <span class="code-string">"running"</span></div>
+              <div><span class="code-func">time</span>: <span class="code-num">2h</span> <span class="code-comment">// 从0到部署</span></div>
+            </div>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">项目</span>
+            </div>
+            <h4 class="font-bold mb-2">OpenClaw 本地部署</h4>
+            <p class="text-xs text-[var(--text-secondary)] mb-3">2小时内完成OpenClaw搭建与本地模型部署，实现完全本地化的AI能力调用。</p>
+            <div class="flex gap-2">
+              <span class="text-[10px] px-2 py-1 bg-[var(--bg)] rounded font-mono">Local LLM</span>
+              <span class="text-[10px] px-2 py-1 bg-[var(--bg)] rounded font-mono">OpenClaw</span>
+            </div>
+            <div class="card-detail mt-4 pt-4 border-t border-[var(--border)]">
+              <div class="img-placeholder aspect-video rounded-lg mb-3">
+                <span class="text-xs">[部署过程截图/终端界面]</span>
+              </div>
+              <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                从零开始，2小时内完成OpenClaw环境搭建、模型下载、本地部署及API测试。实现完全离线的AI推理能力，无需依赖云端服务。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 项目：Skills -->
+      <div class="masonry-item archive-card project" data-category="project">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="img-placeholder aspect-[4/3]">
+            <span class="text-xs">[Skills平台截图/下载数据]</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center justify-between mb-2">
+              <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">项目</span>
+              <span class="font-mono text-xs text-coral">257 下载</span>
+            </div>
+            <h4 class="font-bold mb-2">AI Skills 制作</h4>
+            <p class="text-xs text-[var(--text-secondary)] mb-3">2026年5月14日发布，截止6月6日已获得257次下载。为AI平台开发可复用技能模块。</p>
+            <div class="flex gap-2">
+              <span class="text-[10px] px-2 py-1 bg-[var(--bg)] rounded font-mono">Skills</span>
+              <span class="text-[10px] px-2 py-1 bg-[var(--bg)] rounded font-mono">AIGC</span>
+            </div>
+            <div class="card-detail mt-4 pt-4 border-t border-[var(--border)]">
+              <div class="img-placeholder aspect-video rounded-lg mb-3">
+                <span class="text-xs">[Skills代码/使用示例]</span>
+              </div>
+              <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                为AI平台开发可复用技能模块，发布23天内获得257次下载。Skills涵盖数据处理、内容生成、自动化工作流等多个方向。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 项目：可视化 -->
+      <div class="masonry-item archive-card project" data-category="project">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="img-placeholder aspect-[4/3]">
+            <span class="text-xs">[数据可视化网页截图]</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">项目</span>
+            </div>
+            <h4 class="font-bold mb-2">互动数据可视化网页</h4>
+            <p class="text-xs text-[var(--text-secondary)] mb-3">制作2份聊天数据可视化互动网页，成功破解QQbat聊天记录加密格式，实现数据解析与前端展示。</p>
+            <div class="flex gap-2">
+              <span class="text-[10px] px-2 py-1 bg-[var(--bg)] rounded font-mono">DataViz</span>
+              <span class="text-[10px] px-2 py-1 bg-[var(--bg)] rounded font-mono">Reverse</span>
+            </div>
+            <div class="card-detail mt-4 pt-4 border-t border-[var(--border)]">
+              <div class="img-placeholder aspect-video rounded-lg mb-3">
+                <span class="text-xs">[可视化交互界面/加密分析]</span>
+              </div>
+              <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                独立完成QQbat聊天记录加密格式的逆向分析，制作2份互动数据可视化网页。支持时间轴浏览、情感分析、对话频次统计等多维度展示。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 实习：澎湃 -->
+      <div class="masonry-item archive-card intern" data-category="intern">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="img-placeholder aspect-[4/3]">
+            <span class="text-xs">[澎湃新闻实习照片]</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">实习</span>
+              <span class="text-xs text-[var(--text-secondary)]">2024.4-5</span>
+            </div>
+            <h4 class="font-bold mb-2">澎湃新闻 · 国内视频部</h4>
+            <p class="text-xs text-[var(--text-secondary)] mb-3">线上视频编辑实习生。每天选题15条上报筛选制作成新闻短视频。</p>
+            <div class="space-y-1.5 text-xs">
+              <div class="flex justify-between">
+                <span class="text-[var(--text-secondary)]">制作耗时</span>
+                <span class="font-mono text-coral">2h → 20min</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-[var(--text-secondary)]">返工次数</span>
+                <span class="font-mono text-coral">3 → 0</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-[var(--text-secondary)]">累计浏览</span>
+                <span class="font-mono text-coral">5k+</span>
+              </div>
+            </div>
+            <div class="card-detail mt-4 pt-4 border-t border-[var(--border)]">
+              <div class="img-placeholder aspect-video rounded-lg mb-3">
+                <span class="text-xs">[实习证明/作品合集]</span>
+              </div>
+              <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                在澎湃新闻国内视频部实习期间，独立完成选题、剪辑、字幕、包装全流程。制作效率提升6倍，作品累计浏览量突破5000。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 实习：雄文 -->
+      <div class="masonry-item archive-card intern" data-category="intern">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="img-placeholder aspect-[4/3]">
+            <span class="text-xs">[雄文文化项目照片]</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">实习</span>
+              <span class="text-xs text-[var(--text-secondary)]">2025.10-11</span>
+            </div>
+            <h4 class="font-bold mb-2">雄文（成都）文化创意</h4>
+            <p class="text-xs text-[var(--text-secondary)] mb-3">管培生。跟进活动策划、美术设计、采购选品、场地搭建、活动运营、售后服务全流程。</p>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="text-[10px] px-2 py-1 bg-[var(--bg)] rounded">海底捞展馆</span>
+              <span class="text-[10px] px-2 py-1 bg-[var(--bg)] rounded">境美术馆</span>
+              <span class="text-[10px] px-2 py-1 bg-[var(--bg)] rounded">张杰游园会</span>
+              <span class="text-[10px] px-2 py-1 bg-[var(--bg)] rounded">星盘文化</span>
+            </div>
+            <div class="card-detail mt-4 pt-4 border-t border-[var(--border)]">
+              <div class="img-placeholder aspect-video rounded-lg mb-3">
+                <span class="text-xs">[项目现场/设计稿]</span>
+              </div>
+              <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                作为管培生深度参与4个大型项目，从前期策划到后期执行全覆盖。负责海底捞展馆空间设计、境美术馆视觉系统、张杰游园会活动运营及星盘文化品牌设计。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 实习：人瑞 -->
+      <div class="masonry-item archive-card intern" data-category="intern">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="img-placeholder aspect-[4/3]">
+            <span class="text-xs">[数据标注工作界面]</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">兼职</span>
+              <span class="text-xs text-[var(--text-secondary)]">2025.4</span>
+            </div>
+            <h4 class="font-bold mb-2">人瑞人才 · 数据标注</h4>
+            <p class="text-xs text-[var(--text-secondary)] mb-3">对用户与AI对话进行目的和情感判断，对AI生成内容审核并打标签分类。</p>
+            <div class="p-2 bg-[var(--bg)] rounded-lg text-xs font-mono text-coral">
+              失误率: 18% → 2%
+            </div>
+            <div class="card-detail mt-4 pt-4 border-t border-[var(--border)]">
+              <div class="img-placeholder aspect-video rounded-lg mb-3">
+                <span class="text-xs">[标注样本/工作记录]</span>
+              </div>
+              <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                在数据标注工作中快速掌握AI对话分析逻辑，失误率从18%降至2%。担任无领导小组讨论的总结者和协调者，推动团队高效交付。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 竞赛：蓝桥杯 -->
+      <div class="masonry-item archive-card competition" data-category="competition">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="img-placeholder aspect-[4/3]">
+            <span class="text-xs">[蓝桥杯获奖证书/作品]</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">竞赛</span>
+              <span class="font-mono text-lg font-bold text-coral">国一</span>
+            </div>
+            <h4 class="font-bold mb-2">蓝桥杯「元境杯」</h4>
+            <p class="text-xs text-[var(--text-secondary)] mb-3">元宇宙畅想3D建模视频，设计空间建模并完成30秒展示视频。</p>
+            <div class="text-xs text-[var(--text-secondary)]">
+              <span class="font-mono text-coral">工信部认证</span> · 计算机视觉架构师（中级）
+            </div>
+            <div class="card-detail mt-4 pt-4 border-t border-[var(--border)]">
+              <div class="img-placeholder aspect-video rounded-lg mb-3">
+                <span class="text-xs">[3D建模过程/获奖证书]</span>
+              </div>
+              <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                蓝桥杯全国一等奖作品。独立完成元宇宙空间3D建模及30秒展示视频制作，从概念设计到最终渲染全流程一手包办。同时获工信部计算机视觉架构师（中级）认证。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 竞赛：英语 -->
+      <div class="masonry-item archive-card competition" data-category="competition">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="img-placeholder aspect-[4/3]">
+            <span class="text-xs">[英语演讲比赛照片]</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">竞赛</span>
+              <span class="font-mono text-lg font-bold text-coral">二等奖</span>
+            </div>
+            <h4 class="font-bold mb-2">外研社英语演讲</h4>
+            <p class="text-xs text-[var(--text-secondary)] mb-2">2023年校级二等奖。CET-6及口语能力认证。</p>
+            <div class="card-detail mt-3 pt-3 border-t border-[var(--border)]">
+              <div class="img-placeholder aspect-video rounded-lg mb-3">
+                <span class="text-xs">[演讲现场/获奖证书]</span>
+              </div>
+              <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                外研社英语演讲比赛校级二等奖。具备CET-6及口语能力认证，能够流利进行英语演讲和学术交流。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 竞赛：农业创意 -->
+      <div class="masonry-item archive-card competition" data-category="competition">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="img-placeholder aspect-[4/3]">
+            <span class="text-xs">[平面设计作品]</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">竞赛</span>
+              <span class="font-mono text-lg font-bold text-coral">省级</span>
+            </div>
+            <h4 class="font-bold mb-2">四川省农业创意大赛</h4>
+            <p class="text-xs text-[var(--text-secondary)] mb-2">平面设计类 · 省级三等奖</p>
+            <div class="card-detail mt-3 pt-3 border-t border-[var(--border)]">
+              <div class="img-placeholder aspect-video rounded-lg mb-3">
+                <span class="text-xs">[参赛作品/获奖证书]</span>
+              </div>
+              <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                四川省农业创意大赛平面设计类省级三等奖。作品围绕农业主题进行创意视觉表达，展现了扎实的设计功底。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 竞赛：互联网+ -->
+      <div class="masonry-item archive-card competition" data-category="competition">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="img-placeholder aspect-[4/3]">
+            <span class="text-xs">[互联网+路演照片]</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">竞赛</span>
+              <span class="font-mono text-lg font-bold text-coral">校级</span>
+            </div>
+            <h4 class="font-bold mb-2">互联网+创新创业</h4>
+            <p class="text-xs text-[var(--text-secondary)] mb-2">校级优秀奖 · 核心成员</p>
+            <div class="card-detail mt-3 pt-3 border-t border-[var(--border)]">
+              <div class="img-placeholder aspect-video rounded-lg mb-3">
+                <span class="text-xs">[商业计划书/路演现场]</span>
+              </div>
+              <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                作为核心成员参与互联网+创新创业大赛，负责市场调研、数据爬取、商业计划书撰写及路演PPT制作。项目获校级优秀奖。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 荣誉：A级 -->
+      <div class="masonry-item archive-card competition" data-category="competition">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="img-placeholder aspect-[4/3]">
+            <span class="text-xs">[A级证书照片]</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">荣誉</span>
+              <span class="font-mono text-lg font-bold text-coral">省级</span>
+            </div>
+            <h4 class="font-bold mb-2">四川省综合A级证书</h4>
+            <p class="text-xs text-[var(--text-secondary)] mb-2">2025年获得，综合素质省级认证。</p>
+            <div class="card-detail mt-3 pt-3 border-t border-[var(--border)]">
+              <div class="img-placeholder aspect-video rounded-lg mb-3">
+                <span class="text-xs">[A级证书]</span>
+              </div>
+              <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                四川省大学生综合素质A级证书是省级权威认证，需在思想政治、社会实践、学术科研、文化艺术、体育健康等多维度达到优秀标准。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 校园：传播中心 -->
+      <div class="masonry-item archive-card campus" data-category="campus">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="img-placeholder aspect-[4/3]">
+            <span class="text-xs">[传播中心活动照片]</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">校园</span>
+            </div>
+            <h4 class="font-bold mb-2">传播中心 · 视频部副部长</h4>
+            <p class="text-xs text-[var(--text-secondary)] mb-3">微信部干事晋升副部长，获优秀学生干部、优秀部门荣誉。</p>
+            <div class="flex gap-2">
+              <span class="text-[10px] px-2 py-1 bg-[var(--bg)] rounded">视频制作</span>
+              <span class="text-[10px] px-2 py-1 bg-[var(--bg)] rounded">图文运营</span>
+            </div>
+            <div class="card-detail mt-4 pt-4 border-t border-[var(--border)]">
+              <div class="img-placeholder aspect-video rounded-lg mb-3">
+                <span class="text-xs">[部门合影/工作记录]</span>
+              </div>
+              <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                从微信部干事到视频部副部长，同时承担两个部门的核心工作。获"优秀学生干部"及"优秀部门"双重荣誉，主导多个校园传播项目。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 校园：军训 -->
+      <div class="masonry-item archive-card campus" data-category="campus">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="img-placeholder aspect-[4/3]">
+            <span class="text-xs">[军训照片]</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">校园</span>
+            </div>
+            <h4 class="font-bold mb-2">军训 · 班级负责人</h4>
+            <p class="text-xs text-[var(--text-secondary)] mb-3">担任班级负责人，获军事技能优秀学员荣誉。</p>
+            <div class="card-detail mt-3 pt-3 border-t border-[var(--border)]">
+              <div class="img-placeholder aspect-video rounded-lg mb-3">
+                <span class="text-xs">[军训合影/荣誉证书]</span>
+              </div>
+              <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                军训期间担任班级负责人，协助教官完成训练组织、内务检查、纪律管理等工作。获"军事技能优秀学员"称号。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 校园：生活委员 -->
+      <div class="masonry-item archive-card campus" data-category="campus">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="img-placeholder aspect-[4/3]">
+            <span class="text-xs">[班级活动照片]</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">校园</span>
+            </div>
+            <h4 class="font-bold mb-2">班级生活委员</h4>
+            <p class="text-xs text-[var(--text-secondary)] mb-3">负责上传下达、社群管理、查寝、财务管理。</p>
+            <div class="grid grid-cols-2 gap-2 text-xs text-center">
+              <div class="p-2 bg-[var(--bg)] rounded">
+                <div class="font-mono text-coral font-bold">0</div>
+                <div class="text-[10px] text-[var(--text-secondary)]">失误</div>
+              </div>
+              <div class="p-2 bg-[var(--bg)] rounded">
+                <div class="font-mono text-coral font-bold">&lt;10min</div>
+                <div class="text-[10px] text-[var(--text-secondary)]">反馈</div>
+              </div>
+            </div>
+            <div class="card-detail mt-4 pt-4 border-t border-[var(--border)]">
+              <div class="img-placeholder aspect-video rounded-lg mb-3">
+                <span class="text-xs">[工作记录/班级合影]</span>
+              </div>
+              <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                担任班级生活委员期间，负责班费管理、通知传达、查寝管理。班费收支精确到分，通知传达覆盖率100%，查寝反馈平均8.7分钟。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 创作：音乐 -->
+      <div class="masonry-item archive-card creative" data-category="creative">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="img-placeholder aspect-[4/3]">
+            <span class="text-xs">[音乐人主页截图]</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">创作</span>
+            </div>
+            <h4 class="font-bold mb-2">腾讯认证音乐人</h4>
+            <p class="text-xs text-[var(--text-secondary)] mb-3">词曲制作、演唱。签约作者身份。</p>
+            <div class="flex items-center gap-2 text-xs text-[var(--text-secondary)]">
+              <i data-lucide="music" class="w-4 h-4 text-coral"></i>
+              <span>腾讯音乐人平台认证</span>
+            </div>
+            <div class="card-detail mt-4 pt-4 border-t border-[var(--border)]">
+              <div class="img-placeholder aspect-video rounded-lg mb-3">
+                <span class="text-xs">[音乐作品/认证页面]</span>
+              </div>
+              <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                腾讯音乐人平台认证签约作者，独立进行词曲创作及演唱。作品涵盖流行、民谣等多种风格，具备完整的音乐制作能力。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 创作：舞蹈 -->
+      <div class="masonry-item archive-card creative" data-category="creative">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="img-placeholder aspect-[4/3]">
+            <span class="text-xs">[舞蹈表演照片]</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">创作</span>
+            </div>
+            <h4 class="font-bold mb-2">中国舞十级</h4>
+            <p class="text-xs text-[var(--text-secondary)] mb-2">专业舞蹈等级认证，十级为最高级。</p>
+            <div class="card-detail mt-3 pt-3 border-t border-[var(--border)]">
+              <div class="img-placeholder aspect-video rounded-lg mb-3">
+                <span class="text-xs">[舞蹈表演/等级证书]</span>
+              </div>
+              <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                中国舞十级为最高等级认证，需通过严格的技巧、身韵、剧目表演考核。具备扎实的舞蹈功底和舞台表演能力。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 软件技能 -->
+      <div class="masonry-item archive-card creative" data-category="creative">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-5 card-hover">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">技能</span>
+          </div>
+          <h4 class="font-bold mb-3">软件技能栈</h4>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="text-[10px] px-2 py-1 bg-[var(--bg)] rounded font-mono">PS</span>
+            <span class="text-[10px] px-2 py-1 bg-[var(--bg)] rounded font-mono">AE</span>
+            <span class="text-[10px] px-2 py-1 bg-[var(--bg)] rounded font-mono">PR</span>
+            <span class="text-[10px] px-2 py-1 bg-[var(--bg)] rounded font-mono">AU</span>
+            <span class="text-[10px] px-2 py-1 bg-[var(--bg)] rounded font-mono">剪映</span>
+            <span class="text-[10px] px-2 py-1 bg-[var(--bg)] rounded font-mono">醒图</span>
+            <span class="text-[10px] px-2 py-1 bg-[var(--bg)] rounded font-mono">秀米</span>
+            <span class="text-[10px] px-2 py-1 bg-[var(--bg)] rounded font-mono">Office</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 米兰设计周 -->
+      <div class="masonry-item archive-card intern" data-category="intern">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden card-hover cursor-pointer" onclick="toggleCardDetail(this)">
+          <div class="img-placeholder aspect-[4/3]">
+            <span class="text-xs">[米兰设计周活动照片]</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="px-2 py-0.5 bg-coral/10 text-coral text-[10px] font-mono rounded">志愿</span>
+              <span class="text-xs text-[var(--text-secondary)]">2025.7-10</span>
+            </div>
+            <h4 class="font-bold mb-2">米兰设计周 · 优秀志愿者</h4>
+            <p class="text-xs text-[var(--text-secondary)] mb-3">国家级大学生广告设计榜单赛事，负责官方QQ群运营（485人）。</p>
+            <div class="text-xs space-y-1">
+              <div class="flex justify-between">
+                <span class="text-[var(--text-secondary)]">群内答疑</span>
+                <span class="font-mono">20+次</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-[var(--text-secondary)]">信息转发</span>
+                <span class="font-mono">30+次</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-[var(--text-secondary)]">谣言阻止</span>
+                <span class="font-mono text-coral">1次</span>
+              </div>
+            </div>
+            <div class="card-detail mt-4 pt-4 border-t border-[var(--border)]">
+              <div class="img-placeholder aspect-video rounded-lg mb-3">
+                <span class="text-xs">[志愿者证书/社群截图]</span>
+              </div>
+              <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+                米兰设计周国家级大学生广告设计榜单赛事优秀志愿者。管理485人官方QQ群，平均响应时间低于5分钟，成功阻止一次谣言传播。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 加载更多 -->
+    <div class="text-center mt-10">
+      <button class="px-8 py-3 border border-[var(--border)] rounded-full text-sm font-mono hover:border-coral hover:text-coral transition-all">
+        加载更多档案...
+      </button>
+      <p class="text-xs text-[var(--text-secondary)] mt-3">档案持续更新中 · 最新收录：2026.06.06</p>
+    </div>
+  </section>
+
+  <!-- ==================== 6. 联系/封存 ==================== -->
+  <section class="py-24 md:py-32 relative overflow-hidden">
+    <div class="absolute inset-0 bg-[var(--card)]"></div>
+    <div class="absolute inset-0 opacity-20">
+      <div class="absolute top-0 left-1/4 w-96 h-96 bg-coral rounded-full blur-[150px]"></div>
+      <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500 rounded-full blur-[150px]"></div>
+    </div>
+
+    <div class="relative z-10 max-w-2xl mx-auto px-4 text-center reveal">
+      <div class="seal mx-auto mb-6 w-24 h-24 text-coral border-coral text-[10px]">
+        已结案<br>CLOSED
+      </div>
+
+      <h2 class="font-display text-3xl md:text-4xl mb-4">档案封存</h2>
+      <p class="text-[var(--text-secondary)] mb-10">
+        禁止继续调查。否则调查员也会被她拉去做项目。
+      </p>
+
+      <!-- 叉状封条 + 联系方式 -->
+      <div class="relative mb-10">
+        <div class="tape-cross">
+          <span class="tape-text">TOP SECRET · CONTACT SEALED</span>
+        </div>
+        <div class="flex justify-center items-center gap-6 py-6">
+          <a href="mailto:hello@linghusu.com" class="group flex flex-col items-center gap-1.5 hover:text-coral transition-colors" title="邮箱">
+            <div class="w-10 h-10 rounded-full bg-[var(--bg)] border border-[var(--border)] flex items-center justify-center group-hover:border-coral transition-colors">
+              <i data-lucide="mail" class="w-4 h-4"></i>
+            </div>
+            <span class="text-[10px] font-mono">Email</span>
+          </a>
+          <a href="#" class="group flex flex-col items-center gap-1.5 hover:text-coral transition-colors" title="电话">
+            <div class="w-10 h-10 rounded-full bg-[var(--bg)] border border-[var(--border)] flex items-center justify-center group-hover:border-coral transition-colors">
+              <i data-lucide="phone" class="w-4 h-4"></i>
+            </div>
+            <span class="text-[10px] font-mono">Phone</span>
+          </a>
+          <button onclick="toggleQR()" class="group flex flex-col items-center gap-1.5 hover:text-coral transition-colors" title="微信">
+            <div class="w-10 h-10 rounded-full bg-[var(--bg)] border border-[var(--border)] flex items-center justify-center group-hover:border-coral transition-colors">
+              <i data-lucide="message-circle" class="w-4 h-4"></i>
+            </div>
+            <span class="text-[10px] font-mono">WeChat</span>
+          </button>
+          <a href="#" class="group flex flex-col items-center gap-1.5 hover:text-coral transition-colors" title="QQ">
+            <div class="w-10 h-10 rounded-full bg-[var(--bg)] border border-[var(--border)] flex items-center justify-center group-hover:border-coral transition-colors">
+              <i data-lucide="at-sign" class="w-4 h-4"></i>
+            </div>
+            <span class="text-[10px] font-mono">QQ</span>
+          </a>
+          <a href="#" class="group flex flex-col items-center gap-1.5 hover:text-coral transition-colors" title="GitHub">
+            <div class="w-10 h-10 rounded-full bg-[var(--bg)] border border-[var(--border)] flex items-center justify-center group-hover:border-coral transition-colors">
+              <i data-lucide="github" class="w-4 h-4"></i>
+            </div>
+            <span class="text-[10px] font-mono">GitHub</span>
+          </a>
+          <a href="#" class="group flex flex-col items-center gap-1.5 hover:text-coral transition-colors" title="Bilibili">
+            <div class="w-10 h-10 rounded-full bg-[var(--bg)] border border-[var(--border)] flex items-center justify-center group-hover:border-coral transition-colors">
+              <i data-lucide="play" class="w-4 h-4"></i>
+            </div>
+            <span class="text-[10px] font-mono">Bilibili</span>
+          </a>
+          <a href="#" class="group flex flex-col items-center gap-1.5 hover:text-coral transition-colors" title="小红书">
+            <div class="w-10 h-10 rounded-full bg-[var(--bg)] border border-[var(--border)] flex items-center justify-center group-hover:border-coral transition-colors">
+              <i data-lucide="book-open" class="w-4 h-4"></i>
+            </div>
+            <span class="text-[10px] font-mono">小红书</span>
+          </a>
+        </div>
+        <div class="tape-cross" style="transform: rotate(180deg);">
+          <span class="tape-text">TOP SECRET · CONTACT SEALED</span>
+        </div>
+      </div>
+
+      <div class="flex justify-center gap-6 text-[var(--text-secondary)]">
+        <a href="#" class="hover:text-coral transition-colors"><i data-lucide="github" class="w-5 h-5"></i></a>
+        <a href="#" class="hover:text-coral transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+        <a href="#" class="hover:text-coral transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+        <a href="#" class="hover:text-coral transition-colors"><i data-lucide="book-open" class="w-5 h-5"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-[var(--card)] border-t border-[var(--border)] py-8 text-center">
+    <p class="font-mono text-xs text-[var(--text-secondary)]">FOX-2026-001 · 绝密档案 · 令狐苏</p>
+    <p class="font-mono text-[10px] text-[var(--text-secondary)] mt-1">高保真线框稿 v2.0 · 设计即代码 · 2026.06.06</p>
+  </footer>
+
+  <!-- 微信二维码弹窗 -->
+  <div id="qrModal" class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm" onclick="toggleQR()">
+    <div class="bg-[var(--card)] p-6 rounded-2xl text-center max-w-xs mx-4 border border-[var(--border)]" onclick="event.stopPropagation()">
+      <div class="w-48 h-48 bg-[var(--bg)] rounded-xl mx-auto mb-4 flex items-center justify-center border border-[var(--border)]">
+        <div class="text-center text-[var(--text-secondary)]">
+          <i data-lucide="qr-code" class="w-12 h-12 mx-auto mb-2"></i>
+          <span class="text-xs">[微信二维码]</span>
+        </div>
+      </div>
+      <p class="text-sm text-[var(--text)]">扫码添加，备注"来自档案室"</p>
+    </div>
+  </div>
+
+  <!-- 彩蛋弹窗 -->
+  <div id="eggModal" class="hidden fixed inset-0 z-[70] flex items-center justify-center bg-black/80 backdrop-blur-sm" onclick="closeEgg()">
+    <div class="bg-[var(--card)] text-[var(--text)] p-8 rounded-2xl max-w-md mx-4 text-center border border-coral/30" onclick="event.stopPropagation()">
+      <div class="text-4xl mb-4">🐱</div>
+      <h3 class="font-display text-xl mb-2 text-coral">系统警告</h3>
+      <p class="text-sm text-[var(--text-secondary)] mb-4">检测到调查员过度关注。本系统决定透露一个秘密：</p>
+      <div class="bg-[var(--bg)] rounded-xl p-4 mb-4 font-mono text-xs text-coral">
+        ↑ ↑ ↓ ↓ ← → ← → B A
+      </div>
+      <p class="text-xs text-[var(--text-secondary)]">点击按钮以激活隐藏模式。</p>
+      <button onclick="triggerKonami()" class="mt-4 px-6 py-2 bg-coral text-white rounded-full text-sm hover:bg-coral-glow transition-colors">激活</button>
+    </div>
+  </div>
+
+  <script>
+    // 初始化图标
+    lucide.createIcons();
+
+    // 主题切换
+    function toggleTheme() {
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+      generateParticles();
+    }
+    if (localStorage.getItem('theme') === 'light') {
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+    }
+
+    // 粒子生成
+    function generateParticles() {
+      const container = document.getElementById('particleContainer');
+      container.innerHTML = '';
+      const isDark = document.documentElement.classList.contains('dark');
+      const colors = isDark ? ['#E85A4F', '#8B5CF6', '#3B82F6', '#ffffff'] : ['#E85A4F', '#888888', '#1A1A1A'];
+
+      for(let i=0; i<25; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const size = 1 + Math.random() * 3;
+        p.style.width = size + 'px';
+        p.style.height = size + 'px';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.top = Math.random() * 100 + '%';
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.animationDelay = Math.random() * 20 + 's';
+        p.style.animationDuration = (10 + Math.random() * 20) + 's';
+        p.style.opacity = isDark ? '0.4' : '0.2';
+        container.appendChild(p);
+      }
+    }
+    generateParticles();
+
+    // 鼠标代码轨迹
+    const codeChars = ['{', '}', '/', '<', '>', ';', '()', '[]', '=>', '&&', '||', '??', '...'];
+    let trailThrottle = false;
+    document.addEventListener('mousemove', (e) => {
+      if(trailThrottle) return;
+      trailThrottle = true;
+      setTimeout(() => trailThrottle = false, 80);
+
+      if(Math.random() > 0.7) {
+        const el = document.createElement('div');
+        el.className = 'cursor-trail';
+        el.textContent = codeChars[Math.floor(Math.random() * codeChars.length)];
+        el.style.left = e.clientX + 'px';
+        el.style.top = e.clientY + 'px';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 1000);
+      }
+    });
+
+    // 滚动动画
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) {
+          entry.target.classList.add('active');
+          entry.target.querySelectorAll('.progress-bar').forEach(bar => {
+            bar.style.width = bar.dataset.width;
+          });
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // 打字机效果
+    const typeTexts = document.querySelectorAll('.typewriter-text');
+    typeTexts.forEach((el, idx) => {
+      const text = el.dataset.text;
+      const delay = parseInt(el.dataset.delay || 0);
+      el.textContent = '';
+      el.classList.add('typewriter');
+      setTimeout(() => {
+        let i = 0;
+        const timer = setInterval(() => {
+          if(i < text.length) {
+            el.textContent += text.charAt(i);
+            i++;
+          } else {
+            clearInterval(timer);
+          }
+        }, 40);
+      }, delay);
+    });
+
+    // 瀑布流筛选
+    function filterArchive(category, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cards = document.querySelectorAll('.archive-card');
+      cards.forEach(card => {
+        if(category === 'all' || card.dataset.category === category) {
+          card.style.display = 'block';
+          setTimeout(() => {
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+          }, 10);
+        } else {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(20px)';
+          setTimeout(() => card.style.display = 'none', 300);
+        }
+      });
+    }
+
+    document.querySelectorAll('.archive-card').forEach(card => {
+      card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    });
+
+    // 移动端菜单
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('hidden');
+    }
+
+    // 二维码
+    function toggleQR() {
+      const modal = document.getElementById('qrModal');
+      modal.classList.toggle('hidden');
+    }
+
+    // 彩蛋
+    function triggerEgg() {
+      document.getElementById('eggModal').classList.remove('hidden');
+    }
+    function closeEgg() {
+      document.getElementById('eggModal').classList.add('hidden');
+    }
+
+    // 解锁档案
+    function unlockArchive() {
+      const btn = document.getElementById('unlockBtn');
+      const text = document.getElementById('unlockText');
+      const hint = document.getElementById('scrollHint');
+      const icon = btn.querySelector('i');
+
+      btn.classList.add('unlocked');
+      text.textContent = '已解锁';
+      icon.setAttribute('data-lucide', 'unlock');
+      lucide.createIcons();
+
+      hint.classList.remove('opacity-0');
+
+      setTimeout(() => {
+        document.getElementById('overview').scrollIntoView({ behavior: 'smooth' });
+      }, 800);
+    }
+
+    // CORE 交互
+    function toggleCore(el) {
+      el.classList.toggle('active');
+    }
+
+    // 卡片详情展开
+    function toggleCardDetail(el) {
+      const detail = el.querySelector('.card-detail');
+      if(detail) {
+        detail.classList.toggle('expanded');
+      }
+    }
+
+    // Konami代码效果
+    function triggerKonami() {
+      closeEgg();
+      for(let i=0; i<20; i++) {
+        setTimeout(() => {
+          const spark = document.createElement('div');
+          spark.className = 'spark';
+          spark.textContent = ['✨','🌟','💫','⭐','🐾','💖','🎆','🎇'][i%8];
+          spark.style.left = Math.random() * window.innerWidth + 'px';
+          spark.style.top = Math.random() * window.innerHeight + 'px';
+          spark.style.setProperty('--tx', (Math.random()-0.5)*200 + 'px');
+          spark.style.setProperty('--ty', (Math.random()-0.5)*200 + 'px');
+          document.body.appendChild(spark);
+          setTimeout(() => spark.remove(), 1000);
+        }, i * 50);
+      }
+      document.documentElement.classList.toggle('dark');
+    }
+
+    // 双击烟花
+    document.addEventListener('dblclick', (e) => {
+      const emojis = ['✨','🌟','💫','⭐','🔥','💥'];
+      for(let i=0; i<6; i++) {
+        const spark = document.createElement('div');
+        spark.className = 'spark';
+        spark.textContent = emojis[i];
+        spark.style.left = e.clientX + 'px';
+        spark.style.top = e.clientY + 'px';
+        const ang = (i/6) * Math.PI * 2;
+        const dist = 60 + Math.random() * 80;
+        spark.style.setProperty('--tx', Math.cos(ang)*dist + 'px');
+        spark.style.setProperty('--ty', Math.sin(ang)*dist + 'px');
+        document.body.appendChild(spark);
+        setTimeout(() => spark.remove(), 1000);
+      }
+    });
+
+    // 导航栏滚动效果
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('navbar');
+      const current = window.scrollY;
+      if(current > 100) {
+        nav.classList.add('shadow-lg');
+      } else {
+        nav.classList.remove('shadow-lg');
+      }
+      lastScroll = current;
+    });
+
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if(target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // 彩蛋按钮（点击触发）
+    setTimeout(() => {
+      const btn = document.createElement('button');
+      btn.innerHTML = '🎁';
+      btn.className = 'fixed bottom-6 right-6 w-12 h-12 rounded-full bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-lg hover:border-coral hover:scale-110 transition-all z-40';
+      btn.onclick = triggerEgg;
+      btn.title = '点我';
+      document.body.appendChild(btn);
+    }, 2000);
+  </script>
+</body>
+</html>
